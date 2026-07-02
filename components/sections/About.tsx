@@ -59,7 +59,7 @@ export default function About() {
           {[
             { title: "Logic & Architecture", desc: "Designing scalable AI agent integrations and automated n8n workflows.", icon: <Brain size={28} className="text-[#8B5CF6]" /> },
             { title: "Rapid Execution", desc: "Quickly adapting to new frameworks, LLMs, and cloud-native environments.", icon: <Zap size={28} className="text-[#22D3EE]" /> },
-            { title: "Cloud & Systems", desc: "Certified via Hack2Skill Gen AI Academy & Google Cloud Skills Boost.", icon: <CloudCog size={28} className="text-[#3B82F6]" /> }
+            { title: "Cloud & Systems", desc: "Certified via Google Cloud Skills Boost.", icon: <CloudCog size={28} className="text-[#3B82F6]" /> }
           ].map((attr, index) => (
             <motion.div
               key={index}

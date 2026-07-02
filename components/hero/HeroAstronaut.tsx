@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function HeroAstronaut() {
   return (
@@ -34,9 +35,15 @@ export default function HeroAstronaut() {
         <motion.div
            animate={{ y: [0, 10, 0], rotate: [0, 2, -2, 0] }}
            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-           className="text-7xl sm:text-8xl md:text-9xl drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] z-20"
+           className="relative z-20 h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]"
         >
-          👨
+          <Image
+            src="/astronaut-piyush.png"
+            alt="PIYUSH.OS Commander"
+            fill
+            className="object-contain"
+            priority
+          />
         </motion.div>
       </motion.div>
 
