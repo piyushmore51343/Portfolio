@@ -1,33 +1,49 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Download, Mail } from "lucide-react";
+import { motion } from 'framer-motion';
+import { ArrowRight, Mail } from 'lucide-react';
+// Assuming you have HERO_CONTENT, if not, just use hardcoded strings for now.
+import { HERO_CONTENT } from '@/constants/hero'; 
+
+function scrollToId(href: string) {
+  const id = href.replace('#', '');
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
 
 export default function HeroButtons() {
+  // Fallbacks just in case constants aren't fully set up yet
+  const primaryLabel = HERO_CONTENT?.primaryCTA?.label || "View My Work";
+  const primaryHref = HERO_CONTENT?.primaryCTA?.href || "#projects";
+  const secondaryLabel = HERO_CONTENT?.secondaryCTA?.label || "Contact Me";
+  const secondaryHref = HERO_CONTENT?.secondaryCTA?.href || "#contact";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.6 }}
-      className="flex flex-wrap gap-4 pt-4"
+      transition={{ delay: 0.8, duration: 0.6 }}
+      className="flex flex-col items-center gap-5 sm:flex-row md:justify-start pt-4 w-full"
     >
-      <a href="#projects" className="group relative px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white font-medium flex items-center gap-2 overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(139,92,246,0.5)]">
-        <span className="relative z-10 flex items-center gap-2 font-body">
-          View Projects <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-        </span>
-      </a>
+      <button
+        onClick={() => scrollToId(primaryHref)}
+        className="group relative flex items-center gap-2 overflow-hidden rounded-full bg-[var(--primary)] px-8 py-4 text-sm font-semibold text-white glow transition-all duration-300 hover:scale-105 hover:bg-[#7c3aed]"
+      >
+        <span className="relative z-10 tracking-wide">{primaryLabel}</span>
+        <ArrowRight
+          size={18}
+          className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"
+        />
+        {/* Hover light sweep */}
+        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+      </button>
 
-      <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="group px-6 py-3 rounded-full glass-panel text-[#F8FAFC] font-medium flex items-center gap-2 hover:bg-white/10 transition-all hover:scale-105 border border-white/10 hover:border-white/20">
-        <span className="font-body flex items-center gap-2">
-          Resume <Download size={18} className="group-hover:-translate-y-1 transition-transform" />
-        </span>
-      </a>
-
-      <a href="#contact" className="group px-6 py-3 rounded-full bg-transparent text-[#94A3B8] font-medium flex items-center gap-2 hover:text-[#22D3EE] transition-all border border-transparent hover:border-[#22D3EE]/30">
-        <span className="font-body flex items-center gap-2">
-          Contact <Mail size={18} />
-        </span>
-      </a>
+      <button
+        onClick={() => scrollToId(secondaryHref)}
+        className="group flex items-center gap-2 rounded-full glass border-[var(--glass-border)] px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:border-[var(--primary)] hover:bg-[var(--glass)] hover:scale-105"
+      >
+        <Mail size={18} className="transition-transform duration-300 group-hover:rotate-12" />
+        <span className="tracking-wide">{secondaryLabel}</span>
+      </button>
     </motion.div>
   );
 }

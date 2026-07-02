@@ -1,83 +1,65 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useIntro } from '@/hooks/useIntro';
+import Logo from './Logo';
+import LoadingBar from './LoadingBar';
+import BootMessage from './BootMessage';
 
-export default function Intro({ onComplete }: { onComplete: () => void }) {
-  const [textIndex, setTextIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
+interface IntroProps {
+  onComplete?: () => void;
+}
 
-  const messages = [
-    "INITIALIZING PIYUSH OS...",
-    "LOADING CORE MODULES...",
-    "SYSTEM READY."
-  ];
+export default function Intro({ onComplete }: IntroProps) {
+  const { isBooting, progress } = useIntro(2600);
 
   useEffect(() => {
-    // Sequence the text changes
-    const timer1 = setTimeout(() => setTextIndex(1), 700);
-    const timer2 = setTimeout(() => setTextIndex(2), 1500);
-
-    // Simulate progress bar (0 to 100 in ~2 seconds)
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + 5;
-      });
-    }, 2000 / 20); // 20 steps over 2 seconds
-
-    // Complete the intro sequence at 2.5 seconds
-    const finishTimer = setTimeout(() => {
-      onComplete();
-    }, 2500);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(finishTimer);
-      clearInterval(interval);
-    };
-  }, [onComplete]);
+    if (!isBooting) {
+      onComplete?.();
+    }
+  }, [isBooting, onComplete]);
 
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050816]"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-    >
-      <div className="flex flex-col items-center w-72">
-        <div className="h-6 mb-6">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={textIndex}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              className="font-body text-xs tracking-[0.25em] text-[#22D3EE] uppercase text-center"
-            >
-              {messages[textIndex]}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-
-        {/* Neon Progress Bar */}
-        <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-gradient-to-r from-[#8B5CF6] via-[#3B82F6] to-[#22D3EE]"
-            initial={{ width: "0%" }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.1, ease: "linear" }}
+    <AnimatePresence>
+      {isBooting && (
+        <motion.div
+          key="intro"
+          initial={{ opacity: 1 }}
+          exit={{
+            opacity: 0,
+            scale: 1.03,
+            filter: 'blur(12px)',
+          }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-8 bg-[#050816]"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
+              backgroundSize: '48px 48px',
+            }}
           />
-        </div>
-        
-        <div className="mt-3 text-[#94A3B8] font-body text-[10px] tracking-widest w-full flex justify-end">
-          {progress}%
-        </div>
-      </div>
-    </motion.div>
+
+          <Logo />
+
+          <div className="flex flex-col items-center gap-4">
+            <LoadingBar progress={progress} />
+            <BootMessage progress={progress} />
+          </div>
+
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="absolute bottom-10 font-mono text-[10px] tracking-[0.3em] text-slate-500"
+          >
+            AI & AUTOMATION ENGINEER
+          </motion.span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

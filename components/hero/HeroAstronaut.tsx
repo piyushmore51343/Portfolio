@@ -1,48 +1,53 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 export default function HeroAstronaut() {
   return (
-    <div className="relative w-full h-[400px] flex items-center justify-center pointer-events-none select-none">
-      {/* Glowing Orb / Planet behind */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.85, y: 30 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      className="relative flex h-[300px] w-[300px] items-center justify-center sm:h-[380px] sm:w-[380px] md:h-[450px] md:w-[450px] z-10"
+    >
+      {/* Outer glow ring */}
       <motion.div
-        animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3] 
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute w-64 h-64 rounded-full bg-gradient-to-tr from-[#8B5CF6]/20 to-[#22D3EE]/20 blur-3xl"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+        className="absolute inset-0 rounded-full border border-[var(--primary)] opacity-20"
       />
-      
-      {/* Floating Astronaut Box (Glassmorphism Mockup) */}
       <motion.div
-        animate={{ y: [-15, 15, -15], rotate: [-2, 2, -2] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="relative z-10 w-72 h-80 glass-panel rounded-3xl border border-white/10 bg-[#0B1023]/40 backdrop-blur-md shadow-2xl flex flex-col items-center justify-center p-6 overflow-hidden"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        className="absolute inset-8 rounded-full border border-[var(--accent)] opacity-20"
+      />
+
+      {/* Core glass orb */}
+      <motion.div
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        className="relative flex items-center justify-center h-[70%] w-[70%] rounded-full border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent shadow-[0_0_80px_rgba(139,92,246,0.25)] backdrop-blur-xl"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[var(--secondary)]/10 via-transparent to-[var(--primary)]/10" />
         
-        {/* Placeholder for actual 3D model or image */}
-        <div className="w-32 h-32 rounded-full border border-[#3B82F6]/30 shadow-[0_0_30px_rgba(59,130,246,0.2)] flex items-center justify-center mb-6 relative">
-          <div className="absolute inset-0 rounded-full border border-t-[#22D3EE] animate-spin" style={{ animationDuration: '3s' }} />
-          <span className="text-4xl">👨‍🚀</span>
-        </div>
-        
-        <div className="w-full space-y-3">
-          <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-            <motion.div 
-              className="h-full bg-[#22D3EE]" 
-              animate={{ width: ["0%", "100%", "0%"] }} 
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-          <div className="flex justify-between text-[10px] text-[#94A3B8] font-body uppercase tracking-widest">
-            <span>Core</span>
-            <span className="text-[#22D3EE]">Online</span>
-          </div>
-        </div>
+        {/* Floating Astronaut inside the Orb */}
+        <motion.div
+           animate={{ y: [0, 10, 0], rotate: [0, 2, -2, 0] }}
+           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+           className="text-7xl sm:text-8xl md:text-9xl drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] z-20"
+        >
+          👨
+        </motion.div>
       </motion.div>
-    </div>
+
+      {/* Orbiting accent dot */}
+      <motion.span
+        animate={{ rotate: 360 }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+        className="absolute inset-0"
+      >
+        <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 rounded-full bg-[var(--accent)] shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
+      </motion.span>
+    </motion.div>
   );
 }

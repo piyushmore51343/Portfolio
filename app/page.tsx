@@ -12,11 +12,14 @@ import Experience from "@/components/sections/Experience";
 import Skills from "@/components/sections/Skills";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
+import Footer from "@/components/layout/Footer";
+
 export default function Home() {
   const [introComplete, setIntroComplete] = useState(false);
 
   return (
-    <main className="relative min-h-screen w-full select-none overflow-x-hidden bg-[#050816]">
+    // Added id="home" here for the logo link to trigger scroll to top
+    <main id="home" className="relative min-h-screen w-full select-none overflow-x-hidden bg-[#050816]">
       <AnimatePresence mode="wait">
         {!introComplete && (
           <Intro key="intro" onComplete={() => setIntroComplete(true)} />
@@ -31,25 +34,17 @@ export default function Home() {
           className="relative z-10 w-full"
         >
           <SpaceBackground />
-          <Navbar /> {/* <-- Navbar added */}
+          <Navbar />
           
-          {/* Main Content Areas */}
           <div className="flex flex-col items-center w-full">
-            
-            {/* Hero Section Placeholder */}
-            {/* Hero Section */}
-<Hero />
-
-            {/* Empty sections to test scrolling */}
-            {/* Replace the empty placeholder with this: */}
-<About />
-            {/* Replace the empty placeholder with this: */}
-<Education />
-           <Experience />
+            <Hero />
+            <About />
+            <Education />
+            <Experience />
             <Skills />
             <Projects />
-            <Contact/>
-
+            <Contact />
+            <Footer />
           </div>
         </motion.div>
       )}

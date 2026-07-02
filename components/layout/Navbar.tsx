@@ -1,120 +1,108 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-
-const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Education", href: "#education" },
-  { name: "Experience", href: "#experience" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
-];
+import { Menu, X, Download } from "lucide-react";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [active, setActive] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Handle scroll for glass effect
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    setIsOpen(false);
-    setActive(href);
-    
-    const targetId = href.replace("#", "");
-    const elem = document.getElementById(targetId);
-    if (elem) {
-      elem.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const navLinks = ["About", "Education", "Experience", "Skills", "Projects", "Contact"];
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-[#050816]/70 backdrop-blur-lg border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-4" 
-          : "bg-transparent py-6"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        {/* Logo */}
-        <a 
-          href="#" 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="font-heading text-xl font-bold tracking-widest text-[#F8FAFC] hover:text-glow transition-all"
-        >
-          PIYUSH<span className="text-[#22D3EE]">OS</span>
-        </a>
+    <>
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+          isScrolled ? "py-4 bg-[#050816]/80 backdrop-blur-md border-b border-white/5" : "py-6 bg-transparent"
+        }`}
+      >
+        <div className="container-custom flex items-center justify-between">
+          
+          {/* Logo acting as Home link */}
+          <a href="#home" className="text-xl font-black tracking-widest text-white cursor-pointer select-none relative z-50">
+            PIYUSH<span className="text-[#22D3EE]">.OS</span>
+          </a>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleScrollToSection(e, link.href)}
-              className={`relative font-body text-sm tracking-wide transition-colors hover:text-[#22D3EE] ${
-                active === link.href ? "text-[#22D3EE]" : "text-[#94A3B8]"
-              }`}
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link}
+                href={`#${link.toLowerCase()}`}
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-colors"
+              >
+                {link}
+              </a>
+            ))}
+          </nav>
+
+          {/* Minimalist Resume Button (Desktop) */}
+          <div className="hidden lg:block">
+            <a 
+              href="/PiyushResume.pdf" 
+              download="PiyushResume.pdf" 
+              className="flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-white hover:text-[#050816] transition-all"
             >
-              {link.name}
-              {active === link.href && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="absolute -bottom-2 left-0 right-0 h-[2px] bg-gradient-to-r from-[#8B5CF6] to-[#22D3EE]"
-                />
-              )}
+              <Download size={12} />
+              Resume
             </a>
-          ))}
-        </div>
+          </div>
 
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden text-[#F8FAFC] hover:text-[#22D3EE] transition-colors"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu Dropdown */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#0B1023]/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+          {/* Mobile Menu Toggle */}
+          <button
+            className="lg:hidden text-white p-2 relative z-50"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <div className="flex flex-col items-center py-6 space-y-6">
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </motion.header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: "-100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "-100%" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 z-40 bg-[#050816]/98 backdrop-blur-2xl flex flex-col items-center justify-center lg:hidden"
+          >
+            <nav className="flex flex-col items-center gap-8">
               {navLinks.map((link) => (
                 <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleScrollToSection(e, link.href)}
-                  className="font-body text-sm tracking-widest uppercase text-[#94A3B8] hover:text-[#22D3EE] hover:text-glow transition-all"
+                  key={link}
+                  href={`#${link.toLowerCase()}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold uppercase tracking-[0.2em] text-gray-400 hover:text-[#22D3EE] transition-colors"
                 >
-                  {link.name}
+                  {link}
                 </a>
               ))}
-            </div>
+              
+              {/* Minimalist Resume Button (Mobile) */}
+              <a 
+                href="/PiyushResume.pdf" 
+                download="PiyushResume.pdf" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-6 flex items-center gap-3 px-6 py-3 border border-[#22D3EE]/50 text-xs font-bold uppercase tracking-widest text-[#22D3EE] hover:bg-[#22D3EE] hover:text-[#050816] transition-all"
+              >
+                <Download size={16} />
+                Download Resume
+              </a>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   );
 }

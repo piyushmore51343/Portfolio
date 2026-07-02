@@ -1,36 +1,41 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const messages = [
-  "Initializing PIYUSH OS...",
-  "Loading AI Modules...",
-  "Loading Portfolio...",
-  "Preparing Interface...",
+  'Initializing core systems...',
+  'Loading neural interface...',
+  'Calibrating environment...',
+  'Welcome to PIYUSH OS',
 ];
 
-export default function BootMessage() {
+export default function BootMessage({ progress }: { progress: number }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const stepSize = 100 / messages.length;
+    const next = Math.min(
+      messages.length - 1,
+      Math.floor(progress / stepSize)
+    );
+    setIndex(next);
+  }, [progress]);
+
   return (
-    <div className="mt-12 space-y-2 text-center">
-      {messages.map((msg, index) => (
+    <div className="h-5 overflow-hidden">
+      <AnimatePresence mode="wait">
         <motion.p
-          key={msg}
-          initial={{
-            opacity: 0,
-            y: 8,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: index * 0.35,
-          }}
-          className="text-slate-400 tracking-wide"
+          key={index}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3 }}
+          className="font-mono text-xs tracking-widest text-slate-400 sm:text-sm"
         >
-          {msg}
+          {messages[index]}
         </motion.p>
-      ))}
+      </AnimatePresence>
     </div>
   );
 }

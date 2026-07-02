@@ -100,7 +100,11 @@ p {
 /* ===========================
    UTILITIES
 =========================== */
-
+.text-hollow {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--primary);
+  text-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
 .container-custom {
   width: min(var(--container), 92%);
   margin-inline: auto;
@@ -118,4 +122,30 @@ p {
 
 .section-padding {
   padding: 120px 0;
+}
+/* HUD Cyber Cuts */
+.clip-cyber {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+
+.clip-cyber-reverse {
+  clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+}
+
+.hud-border {
+  position: relative;
+}
+.hud-border::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 15px; height: 15px;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+.hud-border::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0; width: 15px; height: 15px;
+  border-bottom: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
 }
